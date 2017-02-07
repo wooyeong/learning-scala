@@ -5,10 +5,10 @@ val euler_003_challenge = 600851475143L
 def factorize(number: Long) = {
   def divide(number: Long, primes: ArrayBuffer[Long])(divisor: Long): Long = {
     var target = number
-    val isPrime = (testee: Long) => primes.exists(testee % _ == 0)
+    val isNotPrime = (testee: Long) => primes.exists(testee % _ == 0)
     //println(s"starting round> $target, by ${divisor}")
 
-    if (isPrime(divisor)) divide(target, primes)(divisor + 2)
+    if (isNotPrime(divisor)) divide(target, primes)(divisor + 2)
     else {
       primes += divisor
 
@@ -17,14 +17,14 @@ def factorize(number: Long) = {
         target /= divisor
       }
 
-      if (Math.sqrt(target) > divisor)
+      if (math.sqrt(target) > divisor)
         divide(target, primes) {
           if (divisor == 2) 3
           else divisor + 2
         }
       else {
         //println (s"end> returning $divisor or $target, known primes: $primes")
-        if (target == 1 || isPrime(target)) divisor
+        if (target == 1 || isNotPrime(target)) divisor
         else target
       }
     }
