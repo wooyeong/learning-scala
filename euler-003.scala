@@ -3,36 +3,35 @@ import scala.collection.mutable.ArrayBuffer;
 val euler_003_challenge = 600851475143L
 
 def factorize(number: Long) = {
-  def divide(number: Long, primes: ArrayBuffer[Long])(divisor: Long): Long = {
+  def divide(number: Long, primes: ArrayBuffer[Long]): ArrayBuffer[Long] = {
     var target = number
-    val isNotPrime = (testee: Long) => primes.exists(testee % _ == 0)
-    //println(s"starting round> $target, by ${divisor}")
+    val isPrime = (testee: Long) => primes.forall(testee % _ != 0)
+    val factors = ArrayBuffer.empty[Long]
 
-    if (isNotPrime(divisor)) divide(target, primes)(divisor + 2)
+    val divisor = if (primes == Nil) 2L else if (primes.last == 2) 3L
+        else (primes.last + 2 to math.sqrt(target).toLong by 2).find(isPrime(_)).getOrElse(0L)
+
+    if (divisor == 0) factors += target
     else {
+      //println(s"starting round> $target, by ${divisor}")
       primes += divisor
 
       while (target % divisor == 0) {
-        //println(s"dividing $target by $divisor")
         target /= divisor
+        factors += divisor
       }
 
-      if (math.sqrt(target) > divisor)
-        divide(target, primes) {
-          if (divisor == 2) 3
-          else divisor + 2
-        }
+      if (math.sqrt(target).toLong > divisor) factors ++= divide(target, primes)
       else {
-        //println (s"end> returning $divisor or $target, known primes: $primes")
-        if (target == 1 || isNotPrime(target)) divisor
-        else target
+        //println (s"end> returning $target?, known primes: $primes")
+        if (target == 1) factors
+        else factors += target
       }
     }
   }
 
-  if (1 == number) number
-  else divide(number, ArrayBuffer.empty[Long])(2)
+  divide(number, ArrayBuffer.empty[Long])
 }
 
-// (1 to 100) foreach (n => println(s"$n => " + factorize(n)))
+//(2 to 100) foreach (n => println(s"$n => " + factorize(n)))
 println("answer: "+ factorize(euler_003_challenge))
