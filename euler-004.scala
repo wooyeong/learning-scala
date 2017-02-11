@@ -67,4 +67,4 @@ val answer = (999*999 to 100*100 by -1).filter(isPalindrome(_)).find { n =>
   else false
 }.get
 
-println(s"answer: $answer.get => ${factorize(answer)}")
+println(s"answer: $answer => ${factorize(answer)}")
