@@ -1,5 +1,4 @@
 val a = Array.ofDim[Long](21, 21)
-a(0)(0) = 1
 
 for (i <- 0 until 21; j <- 0 until 21) {
     if (i == 0 && j == 0) a(i)(j) = 1
